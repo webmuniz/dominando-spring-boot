@@ -1,18 +1,15 @@
 package academy.devdojo.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class Anime {
     private Long id;
     private String name;
-
-    public Anime(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 
     public static List<Anime> getAnimes() {
         return List.of(new Anime(1L, "Boku no Hero"),

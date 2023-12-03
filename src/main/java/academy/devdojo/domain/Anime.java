@@ -1,25 +1,27 @@
 package academy.devdojo.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Anime {
     private Long id;
     //@JsonProperty("nomeAnime") -> to change the name of the property in the JSON
     private String name;
+    @Getter
     private static List<Anime> animes = new ArrayList<>();
 
-    public static List<Anime> getAnimes() {
-        animes.addAll(List.of(new Anime(1L, "Boku no Hero"),
-                        new Anime(2L, "Berserk"),
-                        new Anime(3L, "Death Note"),
-                        new Anime(4L, "Naruto")));
-        return animes;
+    static {
+        var anime1 = Anime.builder().id(1L).name("Boku no Hero").build();
+        var anime2 = Anime.builder().id(2L).name("Shingeki no Kyojin").build();
+        var anime3 = Anime.builder().id(3L).name("Naruto").build();
+
+        animes.addAll(List.of(anime1, anime2, anime3));
     }
 }

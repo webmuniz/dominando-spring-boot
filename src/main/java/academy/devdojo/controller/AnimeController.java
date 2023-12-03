@@ -7,27 +7,23 @@ import academy.devdojo.request.AnimePutRequest;
 import academy.devdojo.response.AnimeGetResponse;
 import academy.devdojo.response.AnimePostResponse;
 import academy.devdojo.service.AnimeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
 @Log4j2
+@RequiredArgsConstructor
 @RequestMapping(path = {"v1/animes", "v1/animes/"})
 public class AnimeController {
 
-    private static final AnimeMapper MAPPER = AnimeMapper.INSTANCE;
+    private final AnimeMapper mapper;
 
     private final AnimeService animeService;
-
-    public AnimeController() {
-        this.animeService = new AnimeService();
-    }
 
     @GetMapping
     public ResponseEntity<List<AnimeGetResponse>> list(@RequestParam(required = false) String name){
@@ -36,7 +32,7 @@ public class AnimeController {
 
         List<Anime> animes = animeService.findAll(name);
 
-        List<AnimeGetResponse> animeGetResponseList = MAPPER.toAnimeGetResponseList(animes);
+        List<AnimeGetResponse> animeGetResponseList = mapper.toAnimeGetResponseList(animes);
 
         return ResponseEntity.ok(animeGetResponseList);
 
@@ -46,13 +42,9 @@ public class AnimeController {
     public ResponseEntity<AnimeGetResponse> findById(@PathVariable Long id){
         log.info("Request received to find anime by id: {}", id);
 
-        Anime animeFound = animeService.findById(id)
-                .stream()
-                .filter(anime -> anime.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anime not found"));
+        Anime animeFound = animeService.findById(id);
 
-        AnimeGetResponse animeGetResponse = MAPPER.toAnimeGetResponse(animeFound);
+        AnimeGetResponse animeGetResponse = mapper.toAnimeGetResponse(animeFound);
 
         return ResponseEntity.ok(animeGetResponse);
     }
@@ -67,9 +59,11 @@ public class AnimeController {
 
         log.info("Request received to save anime: {}", animePostRequest);
 
-        Anime anime = MAPPER.toAnime(animePostRequest);
+        Anime anime = mapper.toAnime(animePostRequest);
+
         animeService.save(anime);
-        AnimePostResponse animePostResponse = MAPPER.toAnimePostResponse(anime);
+
+        AnimePostResponse animePostResponse = mapper.toAnimePostResponse(anime);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(animePostResponse);
     }
@@ -89,7 +83,7 @@ public class AnimeController {
 
         log.info("Request received to update anime with id: {}", animePutRequest.getId());
 
-        Anime animeUpdated = MAPPER.toAnime(animePutRequest);
+        Anime animeUpdated = mapper.toAnime(animePutRequest);
 
        animeService.update(animeUpdated);
 

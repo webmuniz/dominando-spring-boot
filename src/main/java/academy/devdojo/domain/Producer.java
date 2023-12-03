@@ -1,25 +1,40 @@
 package academy.devdojo.domain;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@Builder
 public class Producer {
     private Long id;
     private String name;
+    private LocalDateTime createdAt;
     @Getter
     private static List<Producer> producers = new ArrayList<>();
 
     static {
-        producers.addAll(List.of(new Producer(1L, "Mappa"),
-                new Producer(2L, "Kyoto Animation"),
-                new Producer(3L, "Madhouse")));
+        var producer1 = Producer.builder()
+                .id(1L)
+                .name("MAPPA")
+                .createdAt(LocalDateTime.now())
+                .build();
+        var producer2 = Producer.builder()
+                .id(2L)
+                .name("Kyoto Animation")
+                .createdAt(LocalDateTime.now())
+                .build();
+        var producer3 = Producer.builder()
+                .id(3L)
+                .name("Madhouse")
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        producers.addAll(List.of(producer1, producer2, producer3));
     }
 }

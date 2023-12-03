@@ -34,6 +34,11 @@ public class AnimeController {
                 .orElse(null);
     }
 
+    /**
+    POST is NOT Idempotent: Which does NOT have the property of being able to be applied more than once whithout the result changing.
+    Every time you call the POST method, a new resource is created.
+    PUT is Idempotent: Which has the property of being able to be applied more than once whithout the result changing.
+    **/
     @PostMapping()
     public Anime save(@RequestBody Anime anime){
         anime.setId(ThreadLocalRandom.current().nextLong(4, 100000));

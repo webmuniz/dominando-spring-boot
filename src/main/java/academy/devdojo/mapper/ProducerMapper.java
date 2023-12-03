@@ -21,8 +21,8 @@ public interface ProducerMapper {
     @Mapping(target = "id", expression = "java(java.util.concurrent.ThreadLocalRandom.current().nextLong(1, 1000))")
     Producer toProducer(ProducerPostRequest request);
 
-    @Mapping(source = "createdAt", target = "createdAt")
-    Producer toProducer(ProducerPutRequest request, LocalDateTime createdAt);
+    Producer toProducer(ProducerPutRequest request);
+
     ProducerPostResponse toProducerPostResponse(Producer producer);
 
     List<ProducerGetResponse> toProducerGetResponseList(List<Producer> producers);

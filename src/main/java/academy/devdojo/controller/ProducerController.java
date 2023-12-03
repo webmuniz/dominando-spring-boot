@@ -3,6 +3,7 @@ package academy.devdojo.controller;
 import academy.devdojo.domain.Producer;
 import academy.devdojo.mapper.ProducerMapper;
 import academy.devdojo.request.ProducerPostRequest;
+import academy.devdojo.request.ProducerPutRequest;
 import academy.devdojo.response.ProducerGetResponse;
 import academy.devdojo.response.ProducerPostResponse;
 import lombok.extern.log4j.Log4j2;
@@ -68,5 +69,24 @@ public class ProducerController {
 
         Producer.getProducers().remove(producer);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> update(@RequestBody ProducerPutRequest producerPutRequest){
+
+            log.info("Request received to update producer with id: {}", producerPutRequest.getId());
+
+            Producer producer = Producer.getProducers()
+                    .stream()
+                    .filter(p -> p.getId().equals(producerPutRequest.getId()))
+                    .findFirst()
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producer not found to be updated"));
+
+            Producer.getProducers().remove(producer);
+            Producer producerUpdated = MAPPER.toProducer(producerPutRequest, producer.getCreatedAt());
+            Producer.getProducers().add(producerUpdated);
+
+            return ResponseEntity.noContent().build();
+
     }
 }

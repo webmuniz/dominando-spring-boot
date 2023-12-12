@@ -29,9 +29,9 @@ class ProducerHardCodedRepositoryTest {
     @BeforeEach
     void init() {
         producers = new ArrayList<>(List.of(
-                Producer.builder().id(1L).name("Ufotable").build(),
-                Producer.builder().id(2L).name("Wit Studio").build(),
-                Producer.builder().id(3L).name("Studio Gibli").build()
+                Producer.builder().id(1L).name("Ufotable").createdAt(LocalDateTime.now()).build(),
+                Producer.builder().id(2L).name("Wit Studio").createdAt(LocalDateTime.now()).build(),
+                Producer.builder().id(3L).name("Studio Gibli").createdAt(LocalDateTime.now()).build()
         ));
 
         BDDMockito.when(producerData.getProducers()).thenReturn(producers);
